@@ -5,6 +5,15 @@ import {
   Check, Copy, Stethoscope, Menu, X, ArrowUpRight, ChevronDown
 } from 'lucide-react';
 
+// --- IMPORTAÇÃO DAS IMAGENS ---
+import imgHero from './assets/WhatsApp Image 2026-01-18 at 22.59.05 (1).jpeg';
+import imgSobre1 from './assets/WhatsApp Image 2026-01-18 at 22.59.04.jpeg';
+import imgSobre2 from './assets/WhatsApp Image 2026-01-18 at 22.59.04 (1).jpeg';
+import imgGaleria1 from './assets/WhatsApp Image 2026-01-18 at 22.59.05 (2).jpeg';
+import imgGaleria2 from './assets/WhatsApp Image 2026-01-18 at 22.59.05.jpeg';
+import imgGaleria3 from './assets/WhatsApp Image 2026-01-18 at 22.59.06 (1).jpeg';
+import imgGaleria4 from './assets/WhatsApp Image 2026-01-18 at 22.59.06.jpeg';
+
 // --- COMPONENTE DE TEXTO REVEAL ---
 const TextReveal = ({ children, className, delay = 0 }) => {
   return (
@@ -22,7 +31,7 @@ const TextReveal = ({ children, className, delay = 0 }) => {
 };
 
 // --- COMPONENTE DE IMAGEM PARALLAX COM ZOOM HOVER ---
-const ParallaxImage = ({ className, src, alt, speed = 1 }) => {
+const ParallaxImage = ({ className, src, alt }) => {
   const ref = useRef(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
   const y = useTransform(scrollYProgress, [0, 1], ["-10%", "10%"]); 
@@ -59,7 +68,8 @@ const App = () => {
     lastName: "Clazer",
     title: "Cirurgião-Dentista | CTBMF",
     email: "adm.joaopedroclazer@outlook.com",
-    instagram: "@dr.joaopedroclazer.cirurgia"
+    instagram: "@dr.joaopedroclazer.cirurgia",
+    instagramUrl: "https://www.instagram.com/dr.joaopedroclazer.cirurgia?igsh=Nm0wZmljdmQzNnNl"
   };
 
   // --- PRELOADER STATE ---
@@ -70,18 +80,16 @@ const App = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  // --- CURSOR STATE (CORRIGIDO: INSTANTÂNEO NO DOT, SUAVE NO RING) ---
+  // --- CURSOR STATE ---
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
 
-  // O Ring segue o mouse com delay suave (Spring)
   const springConfig = { damping: 25, stiffness: 150, mass: 0.5 };
   const cursorXSpring = useSpring(mouseX, springConfig);
   const cursorYSpring = useSpring(mouseY, springConfig);
 
   useEffect(() => {
     const mouseMove = (e) => {
-      // Atualiza valores brutos instantaneamente
       mouseX.set(e.clientX);
       mouseY.set(e.clientY);
     };
@@ -157,14 +165,11 @@ const App = () => {
         )}
       </AnimatePresence>
 
-      {/* --- CURSOR MELHORADO (DUPLA CAMADA) --- */}
-      {/* 1. O Ponto Central (Dot): Resposta Instantânea (usa mouseX direto) */}
+      {/* --- CURSOR --- */}
       <motion.div 
         className="fixed top-0 left-0 w-3 h-3 bg-white rounded-full pointer-events-none z-[70] mix-blend-difference hidden lg:block"
         style={{ x: mouseX, y: mouseY, translateX: "-50%", translateY: "-50%" }}
       />
-      
-      {/* 2. O Círculo Externo (Ring): Resposta Suave (usa cursorXSpring) */}
       <motion.div 
         className="fixed top-0 left-0 w-12 h-12 border border-white/30 rounded-full pointer-events-none z-[60] hidden lg:block"
         style={{ x: cursorXSpring, y: cursorYSpring, translateX: "-50%", translateY: "-50%" }}
@@ -285,7 +290,11 @@ const App = () => {
                  transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
                  className="relative z-10 w-full max-w-[400px]"
                >
-                  <ParallaxImage className="rounded-[2.5rem] shadow-2xl border border-white/10 aspect-[3/4]" alt="Dr. João Pedro" />
+                  <ParallaxImage 
+                    src={imgHero} 
+                    className="rounded-[2.5rem] shadow-2xl border border-white/10 aspect-[3/4]" 
+                    alt="Dr. João Pedro" 
+                  />
                   
                   <motion.div 
                     animate={{ y: [0, -10, 0] }}
@@ -293,11 +302,11 @@ const App = () => {
                     className="absolute -bottom-6 -left-0 md:-left-12 bg-slate-900/90 backdrop-blur-xl p-4 pr-8 rounded-2xl border border-white/10 shadow-2xl flex items-center gap-4"
                   >
                       <div className="bg-gradient-to-br from-cyan-500 to-blue-600 p-3 rounded-xl text-white shadow-lg shadow-cyan-500/20">
-                         <Clock size={20} />
+                          <Clock size={20} />
                       </div>
                       <div>
-                         <p className="text-xl font-bold text-white leading-none">+5.500h</p>
-                         <p className="text-[10px] text-slate-400 uppercase tracking-wider font-semibold mt-1">Prática Clínica</p>
+                          <p className="text-xl font-bold text-white leading-none">+5.500h</p>
+                          <p className="text-[10px] text-slate-400 uppercase tracking-wider font-semibold mt-1">Prática Clínica</p>
                       </div>
                   </motion.div>
                </motion.div>
@@ -343,10 +352,19 @@ const App = () => {
               
               <div className="w-full lg:w-5/12 grid grid-cols-2 gap-6">
                   <div className="translate-y-12">
-                     <ParallaxImage className="rounded-3xl h-64 md:h-80 w-full shadow-lg" alt="Cirurgia" speed={1.2} />
+                     <ParallaxImage 
+                        src={imgSobre1} 
+                        className="rounded-3xl h-64 md:h-80 w-full shadow-lg" 
+                        alt="Cirurgia" 
+                        speed={1.2} 
+                     />
                   </div>
                   <div>
-                     <ParallaxImage className="rounded-3xl h-64 md:h-80 w-full shadow-lg" alt="Atendimento" />
+                     <ParallaxImage 
+                        src={imgSobre2} 
+                        className="rounded-3xl h-64 md:h-80 w-full shadow-lg" 
+                        alt="Atendimento" 
+                     />
                   </div>
               </div>
 
@@ -449,18 +467,25 @@ const App = () => {
           <div className="container mx-auto px-6">
              <div className="flex justify-between items-end mb-12">
                 <h2 className="text-4xl font-bold text-white">Galeria Clínica</h2>
-                <a href={`https://instagram.com/${doctor.instagram.replace('@', '')}`} target="_blank" rel="noreferrer" className="text-slate-400 hover:text-white flex items-center gap-2 text-sm transition-colors">
+                {/* --- LINK DO INSTAGRAM ATUALIZADO AQUI --- */}
+                <a href={doctor.instagramUrl} target="_blank" rel="noreferrer" className="text-slate-400 hover:text-white flex items-center gap-2 text-sm transition-colors">
                     Ver Instagram <ArrowUpRight size={16} />
                 </a>
              </div>
              
              <div className="grid grid-cols-2 md:grid-cols-4 grid-rows-2 gap-4 h-[600px]">
                 <div className="col-span-2 row-span-2 relative overflow-hidden rounded-3xl cursor-none">
-                   <ParallaxImage className="w-full h-full" alt="Caso Cirúrgico" />
+                   <ParallaxImage src={imgGaleria1} className="w-full h-full" alt="Caso Cirúrgico" />
                 </div>
-                <div className="col-span-1 row-span-1 rounded-3xl overflow-hidden"><ParallaxImage className="w-full h-full" alt="Procedimento" /></div>
-                <div className="col-span-1 row-span-2 rounded-3xl overflow-hidden"><ParallaxImage className="w-full h-full" alt="Consultório" /></div>
-                <div className="col-span-1 row-span-1 rounded-3xl overflow-hidden"><ParallaxImage className="w-full h-full" alt="Detalhe" /></div>
+                <div className="col-span-1 row-span-1 rounded-3xl overflow-hidden">
+                    <ParallaxImage src={imgGaleria2} className="w-full h-full" alt="Procedimento" />
+                </div>
+                <div className="col-span-1 row-span-2 rounded-3xl overflow-hidden">
+                    <ParallaxImage src={imgGaleria3} className="w-full h-full" alt="Consultório" />
+                </div>
+                <div className="col-span-1 row-span-1 rounded-3xl overflow-hidden">
+                    <ParallaxImage src={imgGaleria4} className="w-full h-full" alt="Detalhe" />
+                </div>
              </div>
           </div>
         </section>
@@ -557,7 +582,8 @@ const App = () => {
                   <span>© {new Date().getFullYear()} {doctor.shortName}</span>
                   
                   <div className="flex gap-6">
-                     <a href="#" className="hover:text-cyan-400 transition-colors flex items-center gap-2">
+                     {/* --- LINK DO INSTAGRAM NO FOOTER TAMBÉM ATUALIZADO --- */}
+                     <a href={doctor.instagramUrl} target="_blank" rel="noreferrer" className="hover:text-cyan-400 transition-colors flex items-center gap-2">
                         Instagram <ArrowUpRight size={10} />
                      </a>
                      <a href="#" className="hover:text-cyan-400 transition-colors flex items-center gap-2">
